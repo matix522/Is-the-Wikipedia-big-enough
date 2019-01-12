@@ -1,4 +1,4 @@
-package sample;
+/*package sample;
 
 import org.junit.jupiter.api.Test;
 
@@ -7,4 +7,4 @@ public class RandomTests {
     void WikipediaTest(){
 
     }
-}
+}*/

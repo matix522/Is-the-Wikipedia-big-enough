@@ -24,23 +24,10 @@ public class Controller {
     private SplitPane splitPane;
 
     @FXML
-    private WebView webView;
-
-    @FXML
-    public void initialize() {
-        webEngine = webView.getEngine();
-        webEngine.load("http://pl.wikipedia.org/wiki/Specjalna:Losowa_strona");
-        display();
-    }
-    @FXML
-    public void display(){
+    public void initialize(){
         File file = new File("/home/mateusz/Pulpit/logo.png");
         Image img = new Image(file.toURI().toString());
         imageView.setImage(img);
-        Node divider = splitPane.lookup(".split-pane-divider");
-        if(divider!=null){
-            divider.setStyle("-fx-background-color: transparent;");
-        }
     }
 }
 
