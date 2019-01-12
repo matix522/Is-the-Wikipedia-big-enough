@@ -95,6 +95,8 @@ public class GameEngine {
 
     public void handleHyperlinkEvent(String href) {
         current = loadNewWikiPage(href);
+        if(current == null ) return;
+        System.out.println(current.html);
         currentPageChanged();
         score++;
         scoreChanged();
@@ -134,10 +136,16 @@ public class GameEngine {
 
     public Page loadNewWikiPage(String href) {
         if (href.startsWith("http")) {
-            throw new RuntimeException("Link outsidde of Wikipedia");
+            try {
+                System.out.println(wikipediaWebPage.loadPage(href).html);
+
+            } catch (IOException e) {
+            }
+            throw new RuntimeException("Link outside of Wikipedia");
         }
         try {
             var page = wikipediaWebPage.loadPage(href);
+            System.out.println(wikipediaWebPage.loadPage(href).html);
             webEngine.loadContent(page.html);
             return page;
         } catch (IOException e) {
