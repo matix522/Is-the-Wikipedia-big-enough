@@ -57,7 +57,7 @@ public class WikipediaWebPage {
     public Page loadPage(String pageLink) throws IOException {
         Document doc = getDocument(pageLink);
         String url = doc.location();
-        String html = doc.html().replace(wikipediaLink, "").replace("http", "").replaceAll("<a[^<>]*?href=\"(?!\\/wiki\\/).*\"[^<>]*?>([^<>]*)<\\/a>", "$1")
+        String html = doc.html().replace(wikipediaLink, "").replaceAll("<a[^<>]*?href=\"(?!\\/wiki\\/).*?\"[^<>]*?>([^<>]*)<\\/a>", "$1")
                 .replace("\"/w/", "\"" + wikipediaLink + "/w/")
                 .replace("//upload.", "https://upload.")
                 .replace("href=\"#", "href=\"" + url + "#");

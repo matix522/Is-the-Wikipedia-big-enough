@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
@@ -17,20 +18,28 @@
    <children>
       <WebView fx:id="view" layoutX="290.0" prefHeight="720.0" prefWidth="1071.0" />
       <ImageView fx:id="imageView" fitHeight="208.0" fitWidth="289.0" pickOnBounds="true" preserveRatio="true" />
-      <Button layoutY="131.0" mnemonicParsing="false" onMouseClicked="#newGameButton" prefHeight="52.0" prefWidth="289.0" text="New Game" />
-      <Button layoutY="183.0" mnemonicParsing="false" onMouseClicked="#undoButton" prefHeight="52.0" prefWidth="289.0" text="Undo Move" />
-      <Button layoutY="668.0" mnemonicParsing="false" onMouseClicked="#exitButton" prefHeight="52.0" prefWidth="289.0" text="Exit" />
-      <TextArea fx:id="startArticle" editable="false" layoutY="235.0" mouseTransparent="true" prefHeight="73.0" prefWidth="289.0" text="Start article:" wrapText="true">
+      <Button fx:id="newGameButton" layoutY="131.0" mnemonicParsing="false" onMouseClicked="#newGameButtonClick" prefHeight="52.0" prefWidth="144.0" text="New Game" />
+      <Button fx:id="undoButton" layoutX="145.0" layoutY="131.0" mnemonicParsing="false" onMouseClicked="#undoButtonClick" prefHeight="52.0" prefWidth="144.0" text="Undo Move">
+         <rotationAxis>
+            <Point3D />
+         </rotationAxis></Button>
+      <Button fx:id="exitButton" layoutY="668.0" mnemonicParsing="false" onMouseClicked="#exitButtonClick" prefHeight="52.0" prefWidth="289.0" text="Exit" />
+      <TextArea fx:id="startArticle" editable="false" layoutY="183.0" mouseTransparent="true" prefHeight="73.0" prefWidth="289.0" text="Start article:" wrapText="true">
          <font>
             <Font size="16.0" />
          </font>
       </TextArea>
-      <TextArea fx:id="endArticle" editable="false" layoutY="308.0" mouseTransparent="true" prefHeight="73.0" prefWidth="289.0" text="Target:" wrapText="true">
+      <TextArea fx:id="endArticle" editable="false" layoutY="256.0" mouseTransparent="true" prefHeight="73.0" prefWidth="289.0" text="Target:" wrapText="true">
          <font>
             <Font size="16.0" />
          </font>
       </TextArea>
-      <TextArea fx:id="currentArticle" editable="false" layoutY="381.0" mouseTransparent="true" prefHeight="73.0" prefWidth="289.0" text="Current article:" wrapText="true">
+      <TextArea fx:id="currentArticle" editable="false" layoutX="1.0" layoutY="329.0" mouseTransparent="true" prefHeight="73.0" prefWidth="289.0" text="Current article:" wrapText="true">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </TextArea>
+      <TextArea fx:id="score" editable="false" layoutX="1.0" layoutY="402.0" mouseTransparent="true" prefHeight="35.0" prefWidth="289.0" text="Score:" wrapText="true">
          <font>
             <Font size="16.0" />
          </font>

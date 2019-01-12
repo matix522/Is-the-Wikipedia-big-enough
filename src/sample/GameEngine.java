@@ -120,7 +120,7 @@ public class GameEngine {
         score = 0;
         startPage = getRandomPage();
         current = startPage;
-        endPage = loadNewWikiPage("/wiki/Adolf_Hitler");
+        endPage = loadNewWikiPage("/wiki/Zebra");
         path.add(startPage);
 
         pathChanged();

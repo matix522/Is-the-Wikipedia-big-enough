@@ -3,6 +3,7 @@ package sample;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -33,6 +34,15 @@ public class Controller {
     private TextArea currentArticle;
     @FXML
     private TextArea endArticle;
+    @FXML
+    private TextArea score;
+
+    @FXML
+    private Button newGameButton;
+    @FXML
+    private Button undoButton;
+    @FXML
+    private Button exitButton;
 
     @FXML
     public void initialize(){
@@ -42,19 +52,19 @@ public class Controller {
     }
 
     @FXML
-    public void newGameButton()
+    public void newGameButtonClick()
     {
         gameEngine.newGame();
     }
 
     @FXML
-    public void undoButton()
+    public void undoButtonClick()
     {
         gameEngine.undoMove();
     }
 
     @FXML
-    public void exitButton()
+    public void exitButtonClick()
     {
         gameEngine.exit();
     }
@@ -77,12 +87,16 @@ public class Controller {
 
     public void OnPathChanged(List<Page> newValue)
     {
+        if(newValue.size() < 2)
+            undoButton.setDisable(true);
+        else
+            undoButton.setDisable(false);
 
     }
 
-    public void OnScoreChanged(int score)
+    public void OnScoreChanged(int newValue)
     {
-
+        score.setText("Score: " + newValue);
     }
 }
 
