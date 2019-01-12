@@ -1,6 +1,12 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -8,7 +14,12 @@ public class Main extends Application {
     @Override
     public void start(final Stage stage) {
         try {
-            GameEngine engine = new GameEngine(stage,"pl");
+            Parent root = FXMLLoader.load(Controller.class.getResource("sample.fxml"));
+            WebView webView = (WebView) root.getChildrenUnmodifiable().get(0);
+            GameEngine engine = new GameEngine(webView,"en");
+            engine.loadNewWikiPage("/wiki/Cat");
+            stage.setScene(new Scene(root));
+            stage.show();
             engine.newGame();
 
         } catch (Exception e) {

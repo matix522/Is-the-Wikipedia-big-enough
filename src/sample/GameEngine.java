@@ -1,12 +1,14 @@
 package sample;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
+import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -17,7 +19,6 @@ import java.io.IOException;
 
 public class GameEngine {
 
-    private final WebView webView;
     private final WebEngine webEngine;
     private final WikipediaWebPage wikipediaWebPage;
 
@@ -26,55 +27,22 @@ public class GameEngine {
     private Page current = null; /// <URL,HTML>
     private Page endPage = null; /// <URL,HTML>
 
-    public GameEngine(final Stage stage, String language) {
-        webView = new WebView();
-        webEngine = webView.getEngine();
-        wikipediaWebPage = new WikipediaWebPage(language);
+    public GameEngine(WebView view, String language) {
+        webEngine = view.getEngine();
+        wikipediaWebPage = new WikipediaWebPage("https://" + language + ".wikipedia.org");
 
         setUpHyperlinkListener();
 
         webEngine.getLoadWorker().stateProperty().addListener((ov, oldState, newState) -> {
 
-            if (newState == Worker.State.SUCCEEDED) {
+          /*  if (newState == Worker.State.SUCCEEDED) {
+
+                //stage.setTitle(webEngine.getLocation());
+
                 stage.setTitle(webEngine.getTitle().replace(" - Wikipedia", ""));
-            }
+
+            }*/
         });
-
-
-        VBox root = new VBox();
-        root.getChildren().add(webView);
-
-        root.setStyle("-fx-padding: 10;" +
-
-                "-fx-border-style: solid inside;" +
-
-                "-fx-border-width: 2;" +
-
-                "-fx-border-insets: 5;" +
-
-                "-fx-border-radius: 5;" +
-
-                "-fx-border-color: blue;");
-
-
-        // Create the Scene
-
-        Scene scene = new Scene(root);
-
-        // Add  the Scene to the Stage
-
-        stage.setScene(scene);
-
-        // Display the Stage
-
-        stage.show();
-        try {
-            Page page = wikipediaWebPage.getRandomPage();
-            webEngine.loadContent(page.html);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     public void setUpHyperlinkListener() {
