@@ -1,14 +1,12 @@
 package sample;
 
-import com.sun.glass.ui.View;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -23,6 +21,11 @@ public class GameEngine {
     private final WebEngine webEngine;
     private final WikipediaWebPage wikipediaWebPage;
 
+    private int score = 0;
+    private Page startPage = null; /// <URL,HTML>
+    private Page current = null; /// <URL,HTML>
+    private Page endPage = null; /// <URL,HTML>
+
     public GameEngine(final Stage stage, String language) {
         webView = new WebView();
         webEngine = webView.getEngine();
@@ -33,25 +36,13 @@ public class GameEngine {
         webEngine.getLoadWorker().stateProperty().addListener((ov, oldState, newState) -> {
 
             if (newState == Worker.State.SUCCEEDED) {
-
-                //stage.setTitle(webEngine.getLocation());
-
                 stage.setTitle(webEngine.getTitle().replace(" - Wikipedia", ""));
-
             }
         });
 
 
-        // Create the VBox
-
         VBox root = new VBox();
-
-        // Add the WebView to the VBox
-
         root.getChildren().add(webView);
-
-
-        // Set the Style-properties of the VBox
 
         root.setStyle("-fx-padding: 10;" +
 
@@ -77,12 +68,10 @@ public class GameEngine {
         // Display the Stage
 
         stage.show();
-        try
-        {
-            webEngine.loadContent(wikipediaWebPage.getRandomPage());
-        }
-        catch(Exception e)
-        {
+        try {
+            Page page = wikipediaWebPage.getRandomPage();
+            webEngine.loadContent(page.html);
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -94,7 +83,7 @@ public class GameEngine {
 
                 EventListener listener = ev -> {
                     String href = ((Element) ev.getTarget()).getAttribute("href");
-                    loadNewWikiPage(href);
+                    handleHyperlinkEvent(href);
                 };
 
                 Document doc = webEngine.getDocument();
@@ -105,19 +94,53 @@ public class GameEngine {
         });
     }
 
-    public void loadRandomPage()
-    {
-
+    public void handleHyperlinkEvent(String href) {
+        current = loadNewWikiPage(href);
+        score++;
+        if (current.url.equals(endPage.url)) {
+            System.out.println("you have won with score: " + score);
+        }
     }
 
-    public void loadNewWikiPage(String href) {
+    public Page getRandomPage() {
+        try {
+            Page page = wikipediaWebPage.getRandomPage();
+            return page;
+        } catch (IOException e) {
+            System.err.println("Page Error");
+        }
+        return null;
+    }
+
+    public void newGame() {
+        score = 0;
+        startPage = getRandomPage();
+        current = startPage;
+        endPage = loadNewWikiPage("/wiki/Adolf_Hitler");
+
+        webEngine.loadContent(startPage.html);
+        System.out.println(endPage.title);
+    }
+
+    public void exit() {
+        System.exit(-1);
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public Page loadNewWikiPage(String href) {
         if (href.startsWith("http")) {
             throw new RuntimeException("Link outside of Wikipedia");
         }
         try {
-            webEngine.loadContent(wikipediaWebPage.loadPage(href));
+            var page = wikipediaWebPage.loadPage(href);
+            webEngine.loadContent(page.html);
+            return page;
         } catch (IOException e) {
             System.err.println("Page not Found: " + href);
         }
+        return null;
     }
 }
