@@ -15,17 +15,12 @@ import java.io.File;
 
 public class Controller {
 
-    private WebEngine webEngine;
-
     @FXML
     private ImageView imageView;
 
     @FXML
-    private SplitPane splitPane;
-
-    @FXML
     public void initialize(){
-        File file = new File("/home/mateusz/Pulpit/logo.png");
+        File file = new File("./images/logo.png");
         Image img = new Image(file.toURI().toString());
         imageView.setImage(img);
     }
