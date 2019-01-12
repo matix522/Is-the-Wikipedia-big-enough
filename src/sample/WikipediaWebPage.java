@@ -57,7 +57,7 @@ public class WikipediaWebPage {
         Document doc = getDocument(pageLink);
         String url = doc.location();
         System.err.println(wikipediaLink);
-        String html = doc.html().replace(wikipediaLink,"").replace("http","").replaceAll("<a[^<>]*?>([^<>]*)<\\/a>","$1")
+        String html = doc.html().replace(wikipediaLink,"").replace("http","").replaceAll("<a[^<>]*?href=\"(?!\\/wiki\\/).*\"[^<>]*?>([^<>]*)<\\/a>","$1")
                 .replace("\"/w/", "\"" + wikipediaLink + "/w/")
                 .replace("//upload.", "https://upload.")
                 .replace("href=\"#","href=\""+url+"#");
