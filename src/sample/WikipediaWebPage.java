@@ -61,7 +61,6 @@ public class WikipediaWebPage {
                 .replace("href=\"#","href=\""+url+"#");
 
         String title = doc.select("#firstHeading").html();
-        System.out.println(title);
         return new Page(url,html,title);
     }
 

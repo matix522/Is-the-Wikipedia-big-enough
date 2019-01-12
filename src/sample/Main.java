@@ -14,10 +14,9 @@ public class Main extends Application {
     @Override
     public void start(final Stage stage) {
         try {
-            Controller controller = new Controller();
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("sample.fxml"));
-            fxmlLoader.setController(controller);
             Parent root = fxmlLoader.load();
+            Controller controller = fxmlLoader.getController();
             WebView webView = (WebView) root.getChildrenUnmodifiable().get(0);
             GameEngine engine = new GameEngine(webView,"pl");
             controller.init(engine);
@@ -25,6 +24,7 @@ public class Main extends Application {
             stage.setScene(new Scene(root));
             stage.show();
             engine.newGame();
+
 
         } catch (Exception e) {
             e.printStackTrace();
