@@ -49,7 +49,7 @@ public class GameEngine {
 
     public GameEngine(WebView view, String language) {
         webEngine = view.getEngine();
-        wikipediaWebPage = new WikipediaWebPage("https://" + language + ".wikipedia.org");
+        wikipediaWebPage = new WikipediaWebPage(language);
 
         setUpHyperlinkListener();
 
