@@ -31,20 +31,36 @@ public class GameEngine {
 
     private List<Page> path = new ArrayList<>();
 
-    public Page getStartPage() {
-        return startPage;
+    private List<Controller> observers = new ArrayList<>();
+
+    public void addObserver(Controller controller)
+    {
+        observers.add(controller);
     }
 
-    public Page getCurrent() {
-        return current;
+    private void startPageChanged() {
+        for(var o : observers)
+            o.OnStartPageChanged(startPage);
     }
 
-    public Page getEndPage() {
-        return endPage;
+    private void currentPageChanged() {
+        for(var o : observers)
+            o.OnCurrentPageChanged(current);
     }
 
-    public List<Page> getPath() {
-        return path;
+    private void endPageChanged() {
+        for(var o : observers)
+            o.OnEndPageChanged(endPage);
+    }
+
+    private void pathChanged() {
+        for(var o : observers)
+            o.OnPathChanged(path);
+    }
+
+    private void scoreChanged() {
+        for(var o : observers)
+            o.OnScoreChanged(score);
     }
 
     public GameEngine(WebView view, String language) {
@@ -79,7 +95,9 @@ public class GameEngine {
 
     public void handleHyperlinkEvent(String href) {
         current = loadNewWikiPage(href);
+        currentPageChanged();
         score++;
+        scoreChanged();
         if (current.url.equals(endPage.url)) {
             System.out.println("you have won with score: " + score);
         }
@@ -101,6 +119,11 @@ public class GameEngine {
         current = startPage;
         endPage = loadNewWikiPage("/wiki/Adolf_Hitler");
 
+        scoreChanged();
+        startPageChanged();
+        currentPageChanged();
+        endPageChanged();
+
         webEngine.loadContent(startPage.html);
         System.out.println(endPage.title);
     }
@@ -109,9 +132,6 @@ public class GameEngine {
         System.exit(0);
     }
 
-    public int getScore() {
-        return score;
-    }
 
     public Page loadNewWikiPage(String href) {
         if (href.startsWith("http")) {

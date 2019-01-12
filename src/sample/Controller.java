@@ -4,6 +4,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.web.WebEngine;
@@ -12,12 +13,13 @@ import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
 import java.io.File;
+import java.util.List;
 
 public class Controller {
 
-    private static GameEngine gameEngine;
+    private GameEngine gameEngine;
 
-    public static void init(GameEngine engine)
+    public void init(GameEngine engine)
     {
         gameEngine = engine;
     }
@@ -26,7 +28,11 @@ public class Controller {
     private ImageView imageView;
 
     @FXML
-    private SplitPane splitPane;
+    private TextArea startArticle;
+    @FXML
+    private TextArea currentArticle;
+    @FXML
+    private TextArea endArticle;
 
     @FXML
     public void initialize(){
@@ -51,6 +57,32 @@ public class Controller {
     public void exitButton()
     {
         gameEngine.exit();
+    }
+
+
+    public void OnStartPageChanged(Page newValue)
+    {
+        startArticle.setText("Start article: " + System.lineSeparator() + newValue.title);
+    }
+
+    public void OnCurrentPageChanged(Page newValue)
+    {
+        currentArticle.setText("Current article: " + System.lineSeparator() + newValue.title);
+    }
+
+    public void OnEndPageChanged(Page newValue)
+    {
+        endArticle.setText("Target: " + System.lineSeparator() + newValue.title);
+    }
+
+    public void OnPathChanged(List<Page> newValue)
+    {
+
+    }
+
+    public void OnScoreChanged(int score)
+    {
+
     }
 }
 
