@@ -36,7 +36,7 @@ public class Controller {
 
     @FXML
     public void initialize(){
-        File file = new File("/home/mateusz/Pulpit/logo.png");
+        File file = new File("./images/logo.png");
         Image img = new Image(file.toURI().toString());
         imageView.setImage(img);
     }
