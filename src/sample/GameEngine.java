@@ -29,7 +29,7 @@ public class GameEngine {
 
     public GameEngine(WebView view, String language) {
         webEngine = view.getEngine();
-        wikipediaWebPage = new WikipediaWebPage("https://" + language + ".wikipedia.org");
+        wikipediaWebPage = new WikipediaWebPage(language);
 
         setUpHyperlinkListener();
 
@@ -91,7 +91,7 @@ public class GameEngine {
     }
 
     public void exit() {
-        System.exit(-1);
+        System.exit(0);
     }
 
     public int getScore() {

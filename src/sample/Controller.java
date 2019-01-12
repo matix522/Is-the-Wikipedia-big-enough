@@ -15,7 +15,12 @@ import java.io.File;
 
 public class Controller {
 
-    private WebEngine webEngine;
+    private static GameEngine gameEngine;
+
+    public static void init(GameEngine engine)
+    {
+        gameEngine = engine;
+    }
 
     @FXML
     private ImageView imageView;
@@ -28,6 +33,24 @@ public class Controller {
         File file = new File("/home/mateusz/Pulpit/logo.png");
         Image img = new Image(file.toURI().toString());
         imageView.setImage(img);
+    }
+
+    @FXML
+    public void newGameButton()
+    {
+        gameEngine.newGame();
+    }
+
+    @FXML
+    public void undoButton()
+    {
+//        gameEngine.undoMove();
+    }
+
+    @FXML
+    public void exitButton()
+    {
+        gameEngine.exit();
     }
 }
 
