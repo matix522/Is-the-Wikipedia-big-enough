@@ -1,5 +1,6 @@
 package sample;
 
+import com.sun.glass.ui.View;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
@@ -25,7 +26,7 @@ public class GameEngine {
     public GameEngine(final Stage stage, String language) {
         webView = new WebView();
         webEngine = webView.getEngine();
-        wikipediaWebPage = new WikipediaWebPage("https://" + language + ".wikipedia.org");
+        wikipediaWebPage = new WikipediaWebPage(language);
 
         setUpHyperlinkListener();
 
@@ -76,6 +77,14 @@ public class GameEngine {
         // Display the Stage
 
         stage.show();
+        try
+        {
+            webEngine.loadContent(wikipediaWebPage.getRandomPage());
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
 
     }
 
@@ -94,6 +103,11 @@ public class GameEngine {
                     ((EventTarget) lista.item(i)).addEventListener("click", listener, false);
             }
         });
+    }
+
+    public void loadRandomPage()
+    {
+
     }
 
     public void loadNewWikiPage(String href) {

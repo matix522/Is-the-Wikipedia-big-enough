@@ -1,0 +1,2 @@
+pl /wiki/Specjalna:Losowa_strona
+en /wiki/Special:Random

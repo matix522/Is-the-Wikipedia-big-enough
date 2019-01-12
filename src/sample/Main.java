@@ -22,8 +22,7 @@ public class Main extends Application {
     @Override
     public void start(final Stage stage) {
         try {
-            GameEngine engine = new GameEngine(stage,"en");
-            engine.loadNewWikiPage("/wiki/Cat");
+            GameEngine engine = new GameEngine(stage,"pl");
 
         } catch (Exception e) {
             e.printStackTrace();
