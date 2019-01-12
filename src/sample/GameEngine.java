@@ -127,7 +127,6 @@ public class GameEngine {
         endPageChanged();
 
         webEngine.loadContent(startPage.html);
-        System.out.println(endPage.title);
     }
 
     public void exit() {
