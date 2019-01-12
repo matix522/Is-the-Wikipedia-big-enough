@@ -16,6 +16,8 @@ import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.EventTarget;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameEngine {
 
@@ -27,6 +29,24 @@ public class GameEngine {
     private Page current = null; /// <URL,HTML>
     private Page endPage = null; /// <URL,HTML>
 
+    private List<Page> path = new ArrayList<>();
+
+    public Page getStartPage() {
+        return startPage;
+    }
+
+    public Page getCurrent() {
+        return current;
+    }
+
+    public Page getEndPage() {
+        return endPage;
+    }
+
+    public List<Page> getPath() {
+        return path;
+    }
+
     public GameEngine(WebView view, String language) {
         webEngine = view.getEngine();
         wikipediaWebPage = new WikipediaWebPage("https://" + language + ".wikipedia.org");
@@ -35,13 +55,6 @@ public class GameEngine {
 
         webEngine.getLoadWorker().stateProperty().addListener((ov, oldState, newState) -> {
 
-          /*  if (newState == Worker.State.SUCCEEDED) {
-
-                //stage.setTitle(webEngine.getLocation());
-
-                stage.setTitle(webEngine.getTitle().replace(" - Wikipedia", ""));
-
-            }*/
         });
     }
 
@@ -51,7 +64,9 @@ public class GameEngine {
 
                 EventListener listener = ev -> {
                     String href = ((Element) ev.getTarget()).getAttribute("href");
-                    handleHyperlinkEvent(href);
+                    if(href != null) {
+                        handleHyperlinkEvent(href);
+                    }
                 };
 
                 Document doc = webEngine.getDocument();
@@ -91,7 +106,7 @@ public class GameEngine {
     }
 
     public void exit() {
-        System.exit(-1);
+        System.exit(0);
     }
 
     public int getScore() {
@@ -100,7 +115,7 @@ public class GameEngine {
 
     public Page loadNewWikiPage(String href) {
         if (href.startsWith("http")) {
-            throw new RuntimeException("Link outside of Wikipedia");
+            throw new RuntimeException("Link outsidde of Wikipedia");
         }
         try {
             var page = wikipediaWebPage.loadPage(href);
