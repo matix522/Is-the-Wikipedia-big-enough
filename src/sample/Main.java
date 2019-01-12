@@ -16,7 +16,8 @@ public class Main extends Application {
         try {
             Parent root = FXMLLoader.load(Controller.class.getResource("sample.fxml"));
             WebView webView = (WebView) root.getChildrenUnmodifiable().get(0);
-            GameEngine engine = new GameEngine(webView,"en");
+            GameEngine engine = new GameEngine(webView,"pl");
+            Controller.init(engine);
             engine.loadNewWikiPage("/wiki/Cat");
             stage.setScene(new Scene(root));
             stage.show();

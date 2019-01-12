@@ -57,7 +57,8 @@ public class WikipediaWebPage {
         String url = doc.location();
         String html = doc.html()
                 .replace("/w/", wikipediaLink + "/w/")
-                .replace("//upload.", "https://upload.");
+                .replace("//upload.", "https://upload.")
+                .replace("href=\"#","href=\""+url+"#");
 
         String title = doc.select("#firstHeading").html();
         System.out.println(title);
