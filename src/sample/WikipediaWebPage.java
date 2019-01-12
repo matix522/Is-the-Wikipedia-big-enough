@@ -10,15 +10,13 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-public class WikipediaPageLoader {
-    private static String wikipediaLink = "https://en.m.wikipedia.org";
-    private static String marginRemoval = ".mw-body{margin:0}";
+public class WikipediaWebPage {
+    private String wikipediaLink = "https://en.wikipedia.org";
 
-    WikipediaPageLoader() {
-
+    public WikipediaWebPage(String wikipediaLink) {
+        this.wikipediaLink = wikipediaLink;
     }
-
-    String loadPage(String pageLink) throws IOException {
+    private Document getPage(String pageLink)throws IOException{
         Document doc = Jsoup.connect(wikipediaLink + pageLink).get();
         for (var element : doc.body().children()) {
             if (!element.id().equals("content")) {
@@ -34,9 +32,12 @@ public class WikipediaPageLoader {
         doc.select("#catlinks").remove();
         Element styleNode = doc.createElement("style");
         doc.head().appendChild(styleNode);
-        styleNode.append(marginRemoval);
-        System.out.println(doc.html());
-        return doc.html()
+        styleNode.append(".mw-body{margin:0}");
+        return doc;
+    }
+    String loadPage(String pageLink) throws IOException {
+
+        return getPage(pageLink).html()
                 .replace("/w/", wikipediaLink+"/w/")
                 .replace("//upload.", "https://upload.");
     }
