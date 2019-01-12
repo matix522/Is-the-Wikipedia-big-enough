@@ -1,8 +1,42 @@
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.GridPane?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<GridPane fx:controller="sample.Controller"
-          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.web.WebView?>
+
+
+<GridPane alignment="center" hgap="10" onDragDetected="#initialize" prefHeight="768.0" prefWidth="1360.0" vgap="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="sample.Controller">
+   <columnConstraints>
+      <ColumnConstraints />
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints />
+   </rowConstraints>
+   <children>
+      <SplitPane fx:id="splitPane" disable="true" dividerPositions="0.20400593471810088" prefHeight="768.0" prefWidth="1360.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="756.0" prefWidth="279.0" SplitPane.resizableWithParent="false">
+               <children>
+                  <ImageView fx:id="imageView" fitHeight="135.0" fitWidth="271.0" onDragDetected="#display" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../logo.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="756.0" prefWidth="1070.0">
+               <children>
+                  <WebView fx:id="webView" onDragDetected="#initialize" prefHeight="756.0" prefWidth="1069.0" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
 </GridPane>
