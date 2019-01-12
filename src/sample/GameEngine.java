@@ -33,33 +33,32 @@ public class GameEngine {
 
     private List<Controller> observers = new ArrayList<>();
 
-    public void addObserver(Controller controller)
-    {
+    public void addObserver(Controller controller) {
         observers.add(controller);
     }
 
     private void startPageChanged() {
-        for(var o : observers)
+        for (var o : observers)
             o.OnStartPageChanged(startPage);
     }
 
     private void currentPageChanged() {
-        for(var o : observers)
+        for (var o : observers)
             o.OnCurrentPageChanged(current);
     }
 
     private void endPageChanged() {
-        for(var o : observers)
+        for (var o : observers)
             o.OnEndPageChanged(endPage);
     }
 
     private void pathChanged() {
-        for(var o : observers)
+        for (var o : observers)
             o.OnPathChanged(path);
     }
 
     private void scoreChanged() {
-        for(var o : observers)
+        for (var o : observers)
             o.OnScoreChanged(score);
     }
 
@@ -80,7 +79,7 @@ public class GameEngine {
 
                 EventListener listener = ev -> {
                     String href = ((Element) ev.getTarget()).getAttribute("href");
-                    if(href != null) {
+                    if (href != null) {
                         handleHyperlinkEvent(href);
                     }
                 };
@@ -95,9 +94,10 @@ public class GameEngine {
 
     public void handleHyperlinkEvent(String href) {
         current = loadNewWikiPage(href);
-        if(current == null ) return;
-        System.out.println(current.html);
+        if (current == null) return;
+        path.add(current);
         currentPageChanged();
+        pathChanged();
         score++;
         scoreChanged();
         if (current.url.equals(endPage.url)) {
@@ -116,11 +116,14 @@ public class GameEngine {
     }
 
     public void newGame() {
+        path.clear();
         score = 0;
         startPage = getRandomPage();
         current = startPage;
         endPage = loadNewWikiPage("/wiki/Adolf_Hitler");
+        path.add(startPage);
 
+        pathChanged();
         scoreChanged();
         startPageChanged();
         currentPageChanged();
@@ -145,12 +148,23 @@ public class GameEngine {
         }
         try {
             var page = wikipediaWebPage.loadPage(href);
-            System.out.println(wikipediaWebPage.loadPage(href).html);
             webEngine.loadContent(page.html);
             return page;
         } catch (IOException e) {
             System.err.println("Page not Found: " + href);
         }
         return null;
+    }
+
+    public void undoMove() {
+        if (path.size() > 1) {
+            current = path.get(path.size() - 2);
+            path.remove(current);
+            currentPageChanged();
+            pathChanged();
+            score++;
+            scoreChanged();
+            webEngine.loadContent(current.html);
+        }
     }
 }

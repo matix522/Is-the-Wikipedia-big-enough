@@ -50,7 +50,7 @@ public class Controller {
     @FXML
     public void undoButton()
     {
-//        gameEngine.undoMove();
+        gameEngine.undoMove();
     }
 
     @FXML
