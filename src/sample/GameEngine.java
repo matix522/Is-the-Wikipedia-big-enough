@@ -5,6 +5,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -18,6 +20,7 @@ import org.w3c.dom.events.EventTarget;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class GameEngine {
 
@@ -28,6 +31,8 @@ public class GameEngine {
     private Page startPage = null; /// <URL,HTML>
     private Page current = null; /// <URL,HTML>
     private Page endPage = null; /// <URL,HTML>
+
+    private boolean hasBeenWon = false;
 
     private List<Page> path = new ArrayList<>();
 
@@ -98,10 +103,15 @@ public class GameEngine {
         path.add(current);
         currentPageChanged();
         pathChanged();
-        score++;
-        scoreChanged();
-        if (current.url.equals(endPage.url)) {
-            System.out.println("you have won with score: " + score);
+        if(!hasBeenWon)
+        {
+            score++;
+            scoreChanged();
+            if (current.url.equals(endPage.url))
+            {
+                hasBeenWon = true;
+                showDialog();
+            }
         }
     }
 
@@ -120,7 +130,7 @@ public class GameEngine {
         score = 0;
         startPage = getRandomPage();
         current = startPage;
-        endPage = loadNewWikiPage("/wiki/Zebra");
+        endPage = loadNewWikiPage("/wiki/Adolf_Hitler");
         path.add(startPage);
 
         pathChanged();
@@ -133,6 +143,7 @@ public class GameEngine {
     }
 
     public void exit() {
+
         System.exit(0);
     }
 
@@ -166,5 +177,27 @@ public class GameEngine {
             scoreChanged();
             webEngine.loadContent(current.html);
         }
+    }
+
+    public void showDialog()
+    {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        alert.setTitle("You have won");
+        alert.setHeaderText(null);
+        alert.setContentText("You have won in " + score + " moves. Great job!" + System.lineSeparator()+
+                "Press OK to restart game");
+
+        ButtonType new_game = new ButtonType("New game");
+        ButtonType infinity = new ButtonType("Play infinity");
+
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().addAll(new_game, infinity);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == new_game){
+            newGame();
+        }
+
     }
 }
