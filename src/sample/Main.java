@@ -14,11 +14,14 @@ public class Main extends Application {
     @Override
     public void start(final Stage stage) {
         try {
-            Parent root = FXMLLoader.load(Controller.class.getResource("sample.fxml"));
+            Controller controller = new Controller();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("sample.fxml"));
+            fxmlLoader.setController(controller);
+            Parent root = fxmlLoader.load();
             WebView webView = (WebView) root.getChildrenUnmodifiable().get(0);
             GameEngine engine = new GameEngine(webView,"pl");
-            Controller.init(engine);
-            engine.loadNewWikiPage("/wiki/Cat");
+            controller.init(engine);
+            engine.addObserver(controller);
             stage.setScene(new Scene(root));
             stage.show();
             engine.newGame();
