@@ -1,7 +1,8 @@
 package sample;
 
-import com.sun.source.tree.Tree;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
@@ -12,9 +13,13 @@ import javafx.scene.shape.Line;
 
 import java.io.File;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Controller {
     private GameEngine gameEngine;
+    private int interval = 0;
+
 
     @FXML
     private Pane pane;
@@ -52,7 +57,8 @@ public class Controller {
     private TextArea endArticle;
     @FXML
     private TextArea score;
-
+    @FXML
+    private TextArea time;
     @FXML
     private Button newGameButton;
     @FXML
@@ -65,6 +71,14 @@ public class Controller {
         File file = new File("./images/logo.png");
         Image img = new Image(file.toURI().toString());
         imageView.setImage(img);
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                interval++;
+                time.setText("Time: " + interval);
+            }
+
+        }, 0,1000);
     }
 
     @FXML
@@ -88,17 +102,20 @@ public class Controller {
 
     public void OnStartPageChanged(Page newValue)
     {
-        startArticle.setText("Start article: " + System.lineSeparator() + newValue.title);
+        if (newValue!=null)
+            startArticle.setText("Start article: " + System.lineSeparator() + newValue.title);
     }
 
     public void OnCurrentPageChanged(Page newValue)
     {
-        currentArticle.setText("Current article: " + System.lineSeparator() + newValue.title);
+        if (newValue!=null)
+            currentArticle.setText("Current article: " + System.lineSeparator() + newValue.title);
     }
 
     public void OnEndPageChanged(Page newValue)
     {
-        endArticle.setText("Target: " + System.lineSeparator() + newValue.title);
+        if (newValue!=null)
+            endArticle.setText("Target: " + System.lineSeparator() + newValue.title);
     }
 
     public void OnPathChanged(List<Page> newValue) {
@@ -148,17 +165,20 @@ public class Controller {
         displayNodes();
     }
 
-    public void OnScoreChanged(int newValue)
-    {
+    public void OnScoreChanged(int newValue){
+
         score.setText("Score: " + newValue);
     }
+
+    public void OnNewGameStart()
+    {
+        interval = 0;
+    }
+
 
 
     @FXML
     private ScrollPane scrollPane;
-
-
-
     @FXML
     public void displayNodes() {
         pane.getChildren().clear();

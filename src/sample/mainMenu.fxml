@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.web.*?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.web.WebView?>
+
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1360.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.MainController">
+   <children>
+      <WebView fx:id="webView" disable="true" layoutX="220.0" layoutY="234.0" opacity="0.5" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <ImageView fx:id="imageView" fitHeight="234.0" fitWidth="515.0" layoutX="422.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="422.0" AnchorPane.rightAnchor="423.0" AnchorPane.topAnchor="100.0">
+         <viewport>
+            <Rectangle2D />
+         </viewport>
+      </ImageView>
+      <Button fx:id="button" layoutX="480.0" mnemonicParsing="false" onMouseClicked="#newGame" prefHeight="100.0" prefWidth="400.0" text="New Game" AnchorPane.leftAnchor="480.0" AnchorPane.rightAnchor="480.0" AnchorPane.topAnchor="400.0">
+         <font>
+            <Font name="Liberation Serif" size="46.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
