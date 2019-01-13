@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
+import javafx.scene.web.WebView;
 
 import java.io.File;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.TimerTask;
 public class Controller {
     private GameEngine gameEngine;
     private int actualTime;
-    private int timeLimit = 10;
+    private int timeLimit = 300;
 
     @FXML
     private Pane pane;
@@ -46,7 +47,10 @@ public class Controller {
 
     @FXML
     private ImageView imageView;
-
+    @FXML
+    private WebView targetView;
+    @FXML
+    private WebView view;
     @FXML
     private TextArea startArticle;
     @FXML
@@ -69,6 +73,10 @@ public class Controller {
         File file = new File("./images/logo.png");
         Image img = new Image(file.toURI().toString());
         imageView.setImage(img);
+        targetView.setVisible(false);
+        targetView.setDisable(false);
+        endArticle.setOnMouseEntered(e -> {targetView.setDisable(false); targetView.setVisible(true); view.setVisible(false);});
+        endArticle.setOnMouseExited(e -> {targetView.setDisable(false); targetView.setVisible(false); view.setVisible(true);});
     }
 
     @FXML
@@ -190,6 +198,7 @@ public class Controller {
     {
         actualTime = timeLimit;
         prevSize = 0;
+        gameEngine.loadTarget(targetView.getEngine());
         timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
@@ -207,6 +216,7 @@ public class Controller {
                 }
                 else
                 {
+                    timer.cancel();
                     Platform.runLater(() -> {
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("You have lost");
@@ -225,7 +235,6 @@ public class Controller {
                         else
                             gameEngine.freeExploration();
                     });
-                    timer.cancel();
                 }
             }
         }, 0,1000);

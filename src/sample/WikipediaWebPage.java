@@ -70,4 +70,15 @@ public class WikipediaWebPage {
         return loadPage(wikiRandomLink);
     }
 
+    public Page getRandomTargetPage() throws IOException{
+        Document doc = getDocument(wikiRandomLink);
+        String url = doc.location();
+        String html = doc.html().replace(wikipediaLink, "").replaceAll("<a[^<>]*?>([^<>]*)<\\/a>","$1")
+                .replace("\"/w/", "\"" + wikipediaLink + "/w/")
+                .replace("//upload.", "https://upload.")
+                .replace("href=\"#", "href=\"" + url + "#");
+
+        String title = doc.select("#firstHeading").html();
+        return new Page(url, html, title);
+    }
 }
