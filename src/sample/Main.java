@@ -28,6 +28,8 @@ public class Main extends Application {
             Scene scene = new Scene(mainRoot);
             stage.setScene(scene);
             stage.setMaximized(true);
+            stage.setMinHeight(600);
+            stage.setMinWidth(800);
             stage.show();
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("sample.fxml"));

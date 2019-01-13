@@ -62,6 +62,11 @@ public class GameEngine {
             o.OnScoreChanged(score);
     }
 
+    private void newGameStarted() {
+        for (var o : observers)
+            o.OnNewGameStart();
+    }
+
     public GameEngine(WebView view, String language) {
         webEngine = view.getEngine();
         wikipediaWebPage = new WikipediaWebPage(language);
@@ -123,6 +128,7 @@ public class GameEngine {
         endPage = loadNewWikiPage("/wiki/Zebra");
         path.add(startPage);
 
+        newGameStarted();
         pathChanged();
         scoreChanged();
         startPageChanged();
