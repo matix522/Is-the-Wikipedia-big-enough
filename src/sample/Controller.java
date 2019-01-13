@@ -18,7 +18,7 @@ import java.util.TimerTask;
 public class Controller {
     private GameEngine gameEngine;
     private int actualTime;
-    private int timeLimit = 5;
+    private int timeLimit = 300;
 
     @FXML
     private Pane pane;
