@@ -20,7 +20,6 @@ public class Controller {
     private GameEngine gameEngine;
     private int interval = 0;
 
-
     @FXML
     private Pane pane;
 
@@ -37,8 +36,8 @@ public class Controller {
     private double viewPointY = sizeY / 2;
 
     private int prevSize = 0;
-    private TreeNode root = new TreeNode(20,20, radius, "begin");
-    private TreeNode pnode = root;
+    private TreeNode root;
+    private TreeNode pnode;
 
 
     public void init(GameEngine engine)
@@ -84,6 +83,16 @@ public class Controller {
     @FXML
     public void newGameButtonClick()
     {
+        pane.getChildren().clear();
+        sizeX = 275;
+        sizeY = 200;
+        root = null;
+        pnode = null;
+        prevSize = 0;
+        treeDepth = 0;
+        treeWidth = 0;
+        viewPointX = sizeX / 2;
+        viewPointY = sizeY / 2;
         gameEngine.newGame();
     }
 
@@ -126,39 +135,45 @@ public class Controller {
 
         String msg = newValue.get(newValue.size() - 1).title;
 
-        if (prevSize < newValue.size()) {
-            if (pnode.getUpperTreeNode() == null) {
-                TreeNode treeNode = new TreeNode(pnode.getCircleX(), pnode.getCircleY() + change, radius, msg);
-                treeNode.setPrevTreeNode(pnode);
-                treeNode.depth = pnode.depth + 1;
-                if (treeDepth < treeNode.depth) {
-                    sizeY += change;
-                }
-                pnode.setUpperTreeNode(treeNode);
-                pnode.setActive(false);
-                treeNode.setActive(true);
-                pnode = treeNode;
-                viewPointY = pnode.getCircleY();
-            } else {
-                int nnodes = pnode.getRightTreeNodesLength();
-                TreeNode treeNode = new TreeNode(pnode.getCircleX() + (nnodes + 1) * change, pnode.getCircleY(), radius, msg);
-                treeNode.setPrevTreeNode(pnode);
-                treeNode.width = pnode.width + 1;
-                if (treeWidth < treeNode.width) {
-                    sizeX += change;
-                }
-                pnode.setRightTreeNodes(treeNode);
-                pnode.setActive(false);
-                treeNode.setActive(true);
-                pnode = treeNode;
-                viewPointX = pnode.getCircleX();
-            }
+        if (prevSize == 0) {
+            root = new TreeNode(20,20, radius, msg);
+            root.setActive(true);
+            pnode = root;
         } else {
-            pnode.setActive(false);
-            pnode = pnode.getPrevTreeNode();
-            pnode.setActive(true);
-            viewPointX = pnode.getCircleX();
-            viewPointY = pnode.getCircleY();
+            if (prevSize < newValue.size()) {
+                if (pnode.getUpperTreeNode() == null) {
+                    TreeNode treeNode = new TreeNode(pnode.getCircleX(), pnode.getCircleY() + change, radius, msg);
+                    treeNode.setPrevTreeNode(pnode);
+                    treeNode.depth = pnode.depth + 1;
+                    if (treeDepth < treeNode.depth) {
+                        sizeY += change;
+                    }
+                    pnode.setUpperTreeNode(treeNode);
+                    pnode.setActive(false);
+                    treeNode.setActive(true);
+                    pnode = treeNode;
+                    viewPointY = pnode.getCircleY();
+                } else {
+                    int nnodes = pnode.getRightTreeNodesLength();
+                    TreeNode treeNode = new TreeNode(pnode.getCircleX() + (nnodes + 1) * change, pnode.getCircleY(), radius, msg);
+                    treeNode.setPrevTreeNode(pnode);
+                    treeNode.width = pnode.width + 1;
+                    if (treeWidth < treeNode.width) {
+                        sizeX += change;
+                    }
+                    pnode.setRightTreeNodes(treeNode);
+                    pnode.setActive(false);
+                    treeNode.setActive(true);
+                    pnode = treeNode;
+                    viewPointX = pnode.getCircleX();
+                }
+            } else {
+                pnode.setActive(false);
+                pnode = pnode.getPrevTreeNode();
+                pnode.setActive(true);
+                viewPointX = pnode.getCircleX();
+                viewPointY = pnode.getCircleY();
+            }
         }
 
         prevSize = newValue.size();
@@ -175,8 +190,6 @@ public class Controller {
         interval = 0;
     }
 
-
-
     @FXML
     private ScrollPane scrollPane;
     @FXML
@@ -187,13 +200,6 @@ public class Controller {
         pane.setPrefWidth(sizeX);
 
         scrollPane.layout();
-
-        /*if (sizeY > scrollPane.getHeight()) {
-            scrollPane.setVvalue(viewPointY / (sizeY - scrollPane.getHeight()));
-            System.out.println(viewPointY / (sizeY - scrollPane.getHeight()) + " " + viewPointY + " " + (sizeY - scrollPane.getHeight()));
-        }
-        else
-            scrollPane.setVvalue(1);*/
 
         scrollPane.setVvalue(invLerp(scrollPane.getHeight() / 2.0, sizeY - scrollPane.getHeight() / 2.0, viewPointY));
         scrollPane.setHvalue(invLerp(scrollPane.getWidth() / 2.0, sizeX - scrollPane.getWidth() / 2.0, viewPointX));
