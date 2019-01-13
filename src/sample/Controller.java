@@ -18,7 +18,7 @@ import java.util.TimerTask;
 public class Controller {
     private GameEngine gameEngine;
     private int actualTime;
-    private int timeLimit = 300;
+    private int timeLimit = 5;
 
     @FXML
     private Pane pane;
@@ -196,6 +196,8 @@ public class Controller {
 
     public void OnNewGameStart()
     {
+        if(timer != null)
+            timer.cancel();
         actualTime = timeLimit;
         prevSize = 0;
         gameEngine.loadTarget(targetView.getEngine());
