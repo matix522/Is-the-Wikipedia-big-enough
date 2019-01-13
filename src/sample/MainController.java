@@ -4,11 +4,13 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.web.WebView;
 
 import java.io.File;
@@ -27,7 +29,13 @@ public class MainController {
     @FXML
     Button button;
     @FXML
+    Button howToPlay;
+    @FXML
+    Button back;
+    @FXML
     WebView webView;
+    @FXML
+    TextArea help;
 
     void initialize(String html, Scene scene, Parent sencondRoot, GameEngine secondEngine){
         webView.getEngine().loadContent(html);
@@ -46,6 +54,28 @@ public class MainController {
     void newGame(){
         scene.setRoot(secondRoot);
         secondEngine.newGame();
+    }
+    @FXML
+    void getHelp(){
+        howToPlay.setDisable(true);
+        howToPlay.setVisible(false);
+        button.setDisable(true);
+        button.setVisible(false);
+        back.setVisible(true);
+        back.setDisable(false);
+        help.setVisible(true);
+        help.setDisable(false);
+    }
+    @FXML
+    void backToMenu(){
+        howToPlay.setDisable(false);
+        howToPlay.setVisible(true);
+        button.setDisable(false);
+        button.setVisible(true);
+        back.setVisible(false);
+        back.setDisable(true);
+        help.setVisible(false);
+        help.setDisable(true);
     }
 
 }

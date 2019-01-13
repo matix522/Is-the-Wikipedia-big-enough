@@ -141,9 +141,9 @@ public class Controller {
         String msg = newValue.get(newValue.size() - 1).title;
 
         if (prevSize == 0) {
-                root = new TreeNode(20,20, 0, radius, msg);
-                root.setActive(true);
-                pnode = root;
+            root = new TreeNode(20,20, 0, radius, msg);
+            root.setActive(true);
+            pnode = root;
         } else {
             if (prevSize < newValue.size()) {
                 if (pnode.getUpperTreeNode() == null) {
