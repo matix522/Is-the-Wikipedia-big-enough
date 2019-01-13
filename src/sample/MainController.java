@@ -1,10 +1,10 @@
 package sample;
 
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,12 +12,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
 
 import java.io.File;
+import java.util.Optional;
 
 
 public class MainController {
 
     Scene scene;
-    Parent sencondRoot;
+    Parent secondRoot;
     GameEngine secondEngine;
     @FXML
     AnchorPane anchorPane;
@@ -28,7 +29,7 @@ public class MainController {
     @FXML
     WebView webView;
 
-    void initialize(String html, Scene scene, Parent sencondRoot,GameEngine secondEngine){
+    void initialize(String html, Scene scene, Parent sencondRoot, GameEngine secondEngine){
         webView.getEngine().loadContent(html);
         BoxBlur blur = new BoxBlur();
         blur.setWidth(5);
@@ -38,12 +39,12 @@ public class MainController {
         File file = new File("./images/logo_t.png");
         Image img = new Image(file.toURI().toString());
         imageView.setImage(img);        this.scene = scene;
-        this.sencondRoot = sencondRoot;
+        this.secondRoot = sencondRoot;
         this.secondEngine = secondEngine;
     }
     @FXML
     void newGame(){
-        scene.setRoot(sencondRoot);
+        scene.setRoot(secondRoot);
         secondEngine.newGame();
     }
 

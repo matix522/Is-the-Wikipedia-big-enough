@@ -4,6 +4,8 @@ import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
@@ -23,6 +25,7 @@ public class Controller {
 
     private GameEngine gameEngine;
     private int interval = 0;
+
 
     public void init(GameEngine engine)
     {
@@ -85,17 +88,20 @@ public class Controller {
 
     public void OnStartPageChanged(Page newValue)
     {
-        startArticle.setText("Start article: " + System.lineSeparator() + newValue.title);
+        if (newValue!=null)
+            startArticle.setText("Start article: " + System.lineSeparator() + newValue.title);
     }
 
     public void OnCurrentPageChanged(Page newValue)
     {
-        currentArticle.setText("Current article: " + System.lineSeparator() + newValue.title);
+        if (newValue!=null)
+            currentArticle.setText("Current article: " + System.lineSeparator() + newValue.title);
     }
 
     public void OnEndPageChanged(Page newValue)
     {
-        endArticle.setText("Target: " + System.lineSeparator() + newValue.title);
+        if (newValue!=null)
+            endArticle.setText("Target: " + System.lineSeparator() + newValue.title);
     }
 
     public void OnPathChanged(List<Page> newValue)
@@ -104,7 +110,6 @@ public class Controller {
             undoButton.setDisable(true);
         else
             undoButton.setDisable(false);
-
     }
 
     public void OnScoreChanged(int newValue){

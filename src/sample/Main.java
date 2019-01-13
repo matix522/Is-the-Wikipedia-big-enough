@@ -17,7 +17,6 @@ public class Main extends Application {
     @Override
     public void start(final Stage stage) {
         try {
-
             FXMLLoader mainFxmlLoader = new FXMLLoader(getClass().getResource("mainMenu.fxml"));
             Parent mainRoot = mainFxmlLoader.load();
 
@@ -43,7 +42,8 @@ public class Main extends Application {
             controller.init(engine);
             engine.addObserver(controller);
 
-            mainController.initialize(mainGameEngine.loadNewWikiPage("/wiki/Main_Page").html, scene, root, engine);
+
+            mainController.initialize(mainGameEngine.loadNewWikiPage("/wiki/Main_Page").html, scene, root,  engine);
 
 
         } catch (Exception e) {

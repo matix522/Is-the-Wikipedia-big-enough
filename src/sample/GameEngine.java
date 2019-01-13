@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -36,6 +37,7 @@ public class GameEngine {
     private List<Page> path = new ArrayList<>();
 
     private List<Controller> observers = new ArrayList<>();
+    private String userName;
 
     public void addObserver(Controller controller) {
         observers.add(controller);
@@ -134,7 +136,7 @@ public class GameEngine {
         score = 0;
         startPage = getRandomPage();
         current = startPage;
-        endPage = loadNewWikiPage("/wiki/Zebra");
+        endPage = loadNewWikiPage("/wiki/Polska");
         path.add(startPage);
 
         newGameStarted();
@@ -185,8 +187,11 @@ public class GameEngine {
 
     public void showDialog()
     {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        int oldScore = score;
+        String oldStart = startPage.title;
+        String oldEnd = endPage.title;
 
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("You have won");
         alert.setHeaderText(null);
         alert.setContentText("You have won in " + score + " moves. Great job!" + System.lineSeparator()+
@@ -198,10 +203,41 @@ public class GameEngine {
         alert.getButtonTypes().clear();
         alert.getButtonTypes().addAll(new_game, infinity);
 
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == new_game){
+        Optional<ButtonType> result1 = alert.showAndWait();
+        if (result1.isPresent() && result1.get() == new_game){
             newGame();
+    }
+    if(userName == null)
+    {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Online Ranking");
+        dialog.setContentText("Please enter your name to:");
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(name -> userName = name);
+    }
+    if(userName == null)
+    {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Online Ranking");
+            dialog.setContentText("Please enter your name to:");
+
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(name -> userName = name);
+    }
+    if(userName != null)
+    {
+        try
+        {
+            OnlineRanking.addScore(userName, oldScore, oldStart, oldEnd, "en");
         }
+        catch (Exception e)
+        {
+            System.err.println("Error submitting score");
+        }
+
+    }
+
 
     }
 }
