@@ -1,5 +1,6 @@
 package sample;
 
+import com.sun.source.tree.Tree;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -136,13 +137,13 @@ public class Controller {
         String msg = newValue.get(newValue.size() - 1).title;
 
         if (prevSize == 0) {
-            root = new TreeNode(20,20, radius, msg);
+            root = new TreeNode(20,20, 0, radius, msg);
             root.setActive(true);
             pnode = root;
         } else {
             if (prevSize < newValue.size()) {
                 if (pnode.getUpperTreeNode() == null) {
-                    TreeNode treeNode = new TreeNode(pnode.getCircleX(), pnode.getCircleY() + change, radius, msg);
+                    TreeNode treeNode = new TreeNode(pnode.getCircleX(), pnode.getCircleY() + change, 0, radius, msg);
                     treeNode.setPrevTreeNode(pnode);
                     treeNode.depth = pnode.depth + 1;
                     if (treeDepth < treeNode.depth) {
@@ -154,14 +155,19 @@ public class Controller {
                     pnode = treeNode;
                     viewPointY = pnode.getCircleY();
                 } else {
-                    int nnodes = pnode.getRightTreeNodesLength();
-                    TreeNode treeNode = new TreeNode(pnode.getCircleX() + (nnodes + 1) * change, pnode.getCircleY(), radius, msg);
+                    TreeNode lastRightTreeNode = pnode;
+                    while (lastRightTreeNode.getRightTreeNode() != null) {
+                        lastRightTreeNode = lastRightTreeNode.getRightTreeNode();
+                    }
+
+                    double blength = lastRightTreeNode.getRightLength();
+                    TreeNode treeNode = new TreeNode(lastRightTreeNode.getCircleX() + blength + change, lastRightTreeNode.getCircleY(), blength, radius, msg);
                     treeNode.setPrevTreeNode(pnode);
                     treeNode.width = pnode.width + 1;
                     if (treeWidth < treeNode.width) {
                         sizeX += change;
                     }
-                    pnode.setRightTreeNodes(treeNode);
+                    lastRightTreeNode.setRightTreeNode(treeNode);
                     pnode.setActive(false);
                     treeNode.setActive(true);
                     pnode = treeNode;
@@ -217,13 +223,10 @@ public class Controller {
             pane.getChildren().add(new Line(treeNode.getCircleX(), treeNode.getCircleY() + radius, treeNode.getCircleX(), treeNode.getCircleY() + change - radius));
         }
 
-        if (treeNode.getRightTreeNodes() != null) {
-            double circleXChange = change;
-            for (TreeNode rightTreeNode :  treeNode.getRightTreeNodes()) {
-                displayNode(rightTreeNode);
-                pane.getChildren().add(new Line(rightTreeNode.getCircleX() - change + radius, rightTreeNode.getCircleY(), rightTreeNode.getCircleX() - radius, rightTreeNode.getCircleY()));
-                circleXChange += change;
-            }
+        TreeNode rightTreeNode = treeNode.getRightTreeNode();
+        if (rightTreeNode != null) {
+            displayNode(rightTreeNode);
+            pane.getChildren().add(new Line(treeNode.getCircleX() + radius, rightTreeNode.getCircleY(), rightTreeNode.getCircleX() - radius, rightTreeNode.getCircleY()));
         }
     }
 
