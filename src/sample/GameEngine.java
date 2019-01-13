@@ -28,11 +28,10 @@ public class GameEngine {
     private final WikipediaWebPage wikipediaWebPage;
 
     private int score = 0;
+    private boolean hasBeenWon = false;
     private Page startPage = null; /// <URL,HTML>
     private Page current = null; /// <URL,HTML>
     private Page endPage = null; /// <URL,HTML>
-
-    private boolean hasBeenWon = false;
 
     private List<Page> path = new ArrayList<>();
 
@@ -65,6 +64,11 @@ public class GameEngine {
     private void scoreChanged() {
         for (var o : observers)
             o.OnScoreChanged(score);
+    }
+
+    private void newGameStarted() {
+        for (var o : observers)
+            o.OnNewGameStart();
     }
 
     public GameEngine(WebView view, String language) {
@@ -130,9 +134,10 @@ public class GameEngine {
         score = 0;
         startPage = getRandomPage();
         current = startPage;
-        endPage = loadNewWikiPage("/wiki/Adolf_Hitler");
+        endPage = loadNewWikiPage("/wiki/Zebra");
         path.add(startPage);
 
+        newGameStarted();
         pathChanged();
         scoreChanged();
         startPageChanged();
@@ -143,7 +148,6 @@ public class GameEngine {
     }
 
     public void exit() {
-
         System.exit(0);
     }
 
