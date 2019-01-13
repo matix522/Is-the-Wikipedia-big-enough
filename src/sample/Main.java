@@ -27,6 +27,8 @@ public class Main extends Application {
             engine.addObserver(controller);
             stage.setScene(new Scene(root));
             stage.setMaximized(true);
+            stage.setMinHeight(600);
+            stage.setMinWidth(800);
             stage.show();
             engine.newGame();
 

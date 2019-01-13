@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -15,10 +16,13 @@ import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Controller {
 
     private GameEngine gameEngine;
+    private int interval = 0;
 
     public void init(GameEngine engine)
     {
@@ -36,7 +40,8 @@ public class Controller {
     private TextArea endArticle;
     @FXML
     private TextArea score;
-
+    @FXML
+    private TextArea time;
     @FXML
     private Button newGameButton;
     @FXML
@@ -49,6 +54,14 @@ public class Controller {
         File file = new File("./images/logo.png");
         Image img = new Image(file.toURI().toString());
         imageView.setImage(img);
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                interval++;
+                time.setText("Time: " + interval);
+            }
+
+        }, 0,1000);
     }
 
     @FXML
@@ -94,9 +107,14 @@ public class Controller {
 
     }
 
-    public void OnScoreChanged(int newValue)
-    {
+    public void OnScoreChanged(int newValue){
+
         score.setText("Score: " + newValue);
+    }
+
+    public void OnNewGameStart()
+    {
+        interval = 0;
     }
 }
 
