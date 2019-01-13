@@ -4,8 +4,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
-import java.util.LinkedList;
-import java.util.List;
+
+import static java.lang.Double.max;
 
 public class TreeNode {
     final double radiusDelta = 1.0;
@@ -21,22 +21,20 @@ public class TreeNode {
     public int depth = 0;
     public int width = 0;
 
+    public double leftDelta = 0;
+
 
     private TreeNode upperTreeNode = null;
-    private List<TreeNode> rightTreeNodes = null;
+    private TreeNode rightTreeNode = null;
 
     private TreeNode prevTreeNode = null;
 
 
-    public TreeNode(double circleX, double circleY, double radius, String message) {
+    public TreeNode(double circleX, double circleY, double leftDelta, double radius, String message) {
         this.radius = radius;
-
-        rightTreeNodes = new LinkedList<>();
 
         outerCircle = new Circle(radius);
         innerCircle = new Circle(radius - radiusDelta);
-
-
 
         this.circleX = circleX;
         this.circleY = circleY;
@@ -59,6 +57,8 @@ public class TreeNode {
 
         outerCircle.setFill(Color.BLACK);
         innerCircle.setFill(Color.WHITE);
+
+        this.leftDelta = leftDelta;
     }
 
     public Circle getOuterCircle() {
@@ -81,12 +81,12 @@ public class TreeNode {
         return text;
     }
 
-    public void setRightTreeNodes(TreeNode leftTreeNode) {
-        this.rightTreeNodes.add(leftTreeNode);
+    public void setRightTreeNode(TreeNode rightTreeNode) {
+        this.rightTreeNode = rightTreeNode;
     }
 
-    public List<TreeNode> getRightTreeNodes() {
-        return rightTreeNodes;
+    public TreeNode getRightTreeNode() {
+        return rightTreeNode;
     }
 
     public void setUpperTreeNode(TreeNode upperTreeNode) {
@@ -113,11 +113,15 @@ public class TreeNode {
         }
     }
 
-    public int getRightTreeNodesLength() {
-        int nnodes = 0;
-        for (TreeNode treeNode : rightTreeNodes) {
-            nnodes += treeNode.getRightTreeNodesLength() + 1;
+    public double getRightLength() {
+        if (rightTreeNode == null && upperTreeNode == null) {
+            return 0;
+        } else if (rightTreeNode != null && upperTreeNode == null) {
+            return rightTreeNode.getCircleX() - circleX + rightTreeNode.getRightLength();
+        } else if (rightTreeNode == null && upperTreeNode != null) {
+            return upperTreeNode.getRightLength();
+        } else {
+            return max(rightTreeNode.getCircleX() - circleX + rightTreeNode.getRightLength(), upperTreeNode.getRightLength());
         }
-        return nnodes;
     }
 }
