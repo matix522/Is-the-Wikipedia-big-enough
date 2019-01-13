@@ -1,6 +1,11 @@
 package sample;
 
-import javafx.fxml.FXML;
+import javafx.application.Platform;
+import com.sun.source.tree.Tree;
+import javafx.embed.swing.SwingFXUtils;
+iimport javafx.scene.control.*;
+        mport javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
@@ -12,12 +17,14 @@ import javafx.scene.web.WebView;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Controller {
     private GameEngine gameEngine;
-    private int interval = 0;
+    private int actualTime;
+    private int timeLimit = 5;
 
     @FXML
     private Pane pane;
@@ -37,7 +44,7 @@ public class Controller {
     private int prevSize = 0;
     private TreeNode root;
     private TreeNode pnode;
-
+    private Timer timer;
 
     public void init(GameEngine engine)
     {
@@ -72,19 +79,10 @@ public class Controller {
         File file = new File("./images/logo.png");
         Image img = new Image(file.toURI().toString());
         imageView.setImage(img);
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            public void run() {
-                interval++;
-                time.setText("Time: " + interval);
-            }
-
-        }, 0,1000);
         targetView.setVisible(false);
         targetView.setDisable(false);
         endArticle.setOnMouseEntered(e -> {targetView.setDisable(false); targetView.setVisible(true); view.setVisible(false);});
         endArticle.setOnMouseExited(e -> {targetView.setDisable(false); targetView.setVisible(false); view.setVisible(true);});
-
     }
 
     @FXML
@@ -143,9 +141,9 @@ public class Controller {
         String msg = newValue.get(newValue.size() - 1).title;
 
         if (prevSize == 0) {
-            root = new TreeNode(20,20, 0, radius, msg);
-            root.setActive(true);
-            pnode = root;
+                root = new TreeNode(20,20, 0, radius, msg);
+                root.setActive(true);
+                pnode = root;
         } else {
             if (prevSize < newValue.size()) {
                 if (pnode.getUpperTreeNode() == null) {
@@ -197,10 +195,57 @@ public class Controller {
         score.setText("Score: " + newValue);
     }
 
+    public void OnWin()
+    {
+        timer.cancel();
+    }
+
     public void OnNewGameStart()
     {
-        interval = 0;
+        if(timer != null)
+            timer.cancel();
+        actualTime = timeLimit;
+        prevSize = 0;
         gameEngine.loadTarget(targetView.getEngine());
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                if(actualTime > 0)
+                {
+                    if(actualTime <= 30)
+                    {
+                        if(actualTime % 2 == 0)
+                            time.setStyle("-fx-text-inner-color: black;");
+                        else
+                            time.setStyle("-fx-text-inner-color: red;");
+                    }
+                    actualTime--;
+                    time.setText("Time left: " + actualTime/60 + " min " + actualTime%60 + " sec");
+                }
+                else
+                {
+                    timer.cancel();
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("You have lost");
+                        alert.setHeaderText(null);
+                        alert.setContentText("You ran out of time!" + System.lineSeparator());
+
+                        ButtonType new_game = new ButtonType("Start new game");
+                        ButtonType infinity = new ButtonType("Continue free exploration");
+
+                        alert.getButtonTypes().clear();
+                        alert.getButtonTypes().addAll(new_game, infinity);
+
+                        Optional<ButtonType> result1 = alert.showAndWait();
+                        if (result1.isPresent() && result1.get() == new_game)
+                            gameEngine.newGame();
+                        else
+                            gameEngine.freeExploration();
+                    });
+                }
+            }
+        }, 0,1000);
     }
 
     @FXML
@@ -241,5 +286,6 @@ public class Controller {
     {
         return (v - a) / (b - a);
     }
+
 }
 
