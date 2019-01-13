@@ -184,8 +184,9 @@ public class GameEngine {
 
     public void undoMove() {
         if (path.size() > 1) {
-            current = path.get(path.size() - 2);
+            Page temp = path.get(path.size() - 2);
             path.remove(current);
+            current = temp;
             currentPageChanged();
             pathChanged();
             score++;
