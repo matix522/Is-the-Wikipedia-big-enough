@@ -136,7 +136,7 @@ public class GameEngine {
         score = 0;
         startPage = getRandomPage();
         current = startPage;
-        endPage = loadNewWikiPage("/wiki/Polska");
+        endPage = getRandomPage(); //loadNewWikiPage("/wiki/Polska");
         path.add(startPage);
 
         newGameStarted();
@@ -194,11 +194,10 @@ public class GameEngine {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("You have won");
         alert.setHeaderText(null);
-        alert.setContentText("You have won in " + score + " moves. Great job!" + System.lineSeparator()+
-                "Press OK to restart game");
+        alert.setContentText("You have won in " + score + " moves. Great job!" + System.lineSeparator());
 
-        ButtonType new_game = new ButtonType("New game");
-        ButtonType infinity = new ButtonType("Play infinity");
+        ButtonType new_game = new ButtonType("Start new game");
+        ButtonType infinity = new ButtonType("Continue free exploration");
 
         alert.getButtonTypes().clear();
         alert.getButtonTypes().addAll(new_game, infinity);
@@ -211,7 +210,7 @@ public class GameEngine {
     {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Online Ranking");
-        dialog.setContentText("Please enter your name to:");
+        dialog.setContentText("Please enter your name to add your score to list:");
 
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> userName = name);
