@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
+import javafx.scene.web.WebView;
 
 import java.io.File;
 import java.util.List;
@@ -48,7 +49,10 @@ public class Controller {
 
     @FXML
     private ImageView imageView;
-
+    @FXML
+    private WebView targetView;
+    @FXML
+    private WebView view;
     @FXML
     private TextArea startArticle;
     @FXML
@@ -79,6 +83,11 @@ public class Controller {
             }
 
         }, 0,1000);
+        targetView.setVisible(false);
+        targetView.setDisable(false);
+        endArticle.setOnMouseEntered(e -> {targetView.setDisable(false); targetView.setVisible(true); view.setVisible(false);});
+        endArticle.setOnMouseExited(e -> {targetView.setDisable(false); targetView.setVisible(false); view.setVisible(true);});
+
     }
 
     @FXML
@@ -194,6 +203,7 @@ public class Controller {
     public void OnNewGameStart()
     {
         interval = 0;
+        gameEngine.loadTarget(targetView.getEngine());
     }
 
     @FXML

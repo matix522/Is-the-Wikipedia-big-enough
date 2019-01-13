@@ -30,9 +30,9 @@ public class GameEngine {
 
     private int score = 0;
     private boolean hasBeenWon = false;
-    private Page startPage = null; /// <URL,HTML>
-    private Page current = null; /// <URL,HTML>
-    private Page endPage = null; /// <URL,HTML>
+    private Page startPage = null;
+    private Page current = null;
+    private Page endPage = null;
 
     private List<Page> path = new ArrayList<>();
 
@@ -130,13 +130,22 @@ public class GameEngine {
         }
         return null;
     }
+    public Page getRandomTargetPage() {
+        try {
+            Page page = wikipediaWebPage.getRandomTargetPage();
+            return page;
+        } catch (IOException e) {
+            System.err.println("Page Error");
+        }
+        return null;
+    }
 
     public void newGame() {
         path.clear();
         score = 0;
         startPage = getRandomPage();
         current = startPage;
-        endPage = getRandomPage(); //loadNewWikiPage("/wiki/Polska");
+        endPage = getRandomTargetPage(); //loadNewWikiPage("/wiki/Polska");
         path.add(startPage);
 
         newGameStarted();
@@ -238,5 +247,9 @@ public class GameEngine {
     }
 
 
+    }
+
+    public void loadTarget(WebEngine engine) {
+        engine.loadContent(endPage.html);
     }
 }
