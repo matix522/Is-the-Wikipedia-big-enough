@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
@@ -73,6 +74,12 @@ public class GameEngine {
             o.OnNewGameStart();
     }
 
+    private void win() {
+        for (var o : observers)
+            o.OnWin();
+    }
+
+
     public GameEngine(WebView view, String language) {
         webEngine = view.getEngine();
         wikipediaWebPage = new WikipediaWebPage(language);
@@ -116,6 +123,7 @@ public class GameEngine {
             if (current.url.equals(endPage.url))
             {
                 hasBeenWon = true;
+                win();
                 showDialog();
             }
         }
@@ -143,10 +151,12 @@ public class GameEngine {
     public void newGame() {
         path.clear();
         score = 0;
+        hasBeenWon = false;
         startPage = getRandomPage();
         current = startPage;
         endPage = getRandomTargetPage(); //loadNewWikiPage("/wiki/Polska");
         path.add(startPage);
+
 
         newGameStarted();
         pathChanged();
@@ -159,6 +169,7 @@ public class GameEngine {
     }
 
     public void exit() {
+        Platform.exit();
         System.exit(0);
     }
 
@@ -189,8 +200,11 @@ public class GameEngine {
             current = temp;
             currentPageChanged();
             pathChanged();
-            score++;
-            scoreChanged();
+            if(!hasBeenWon)
+            {
+                score++;
+                scoreChanged();
+            }
             webEngine.loadContent(current.html);
         }
     }
@@ -213,41 +227,36 @@ public class GameEngine {
         alert.getButtonTypes().addAll(new_game, infinity);
 
         Optional<ButtonType> result1 = alert.showAndWait();
-        if (result1.isPresent() && result1.get() == new_game){
-            newGame();
-    }
-    if(userName == null)
-    {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Online Ranking");
-        dialog.setContentText("Please enter your name to add your score to list:");
-
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(name -> userName = name);
-    }
-    if(userName == null)
-    {
+        if(userName == null)
+        {
             TextInputDialog dialog = new TextInputDialog();
             dialog.setTitle("Online Ranking");
-            dialog.setContentText("Please enter your name to:");
+            dialog.setContentText("Please enter your name to add your score to list:");
 
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(name -> userName = name);
+        }
+        if(userName != null)
+        {
+            try
+            {
+                OnlineRanking.addScore(userName, oldScore, oldStart, oldEnd, "en");
+            }
+            catch (Exception e)
+            {
+                System.err.println("Error submitting score");
+            }
+
+        }
+        if (result1.isPresent() && result1.get() == new_game){
+            newGame();
+        }
+
     }
-    if(userName != null)
+
+    public void freeExploration()
     {
-        try
-        {
-            OnlineRanking.addScore(userName, oldScore, oldStart, oldEnd, "en");
-        }
-        catch (Exception e)
-        {
-            System.err.println("Error submitting score");
-        }
-
-    }
-
-
+        hasBeenWon = true;
     }
 
     public void loadTarget(WebEngine engine) {
